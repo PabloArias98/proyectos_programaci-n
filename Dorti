@@ -43,10 +43,66 @@ public class Dorti {
 
     }
     
+    public static boolean buscarDorsal(Corredor acorredores[], Dorti contrarreloj[], int dorsal){
+        //le paso los dos arrays y el dorsal que he introducido para buscarlo
+        boolean encontrado=false;
+        int aux_con, aux_aco;
+        int i , j;
+    
+            for(i=0; (i<acorredores.length) && (encontrado == false); i++){
+                    
+                if (acorredores[i].dorsal == dorsal) {  //si está registrado
+                    //una vez que encuentra el dorsal registrado comprueba si ha participado
+                    aux_aco = i;
+                    
+                    for (j=0; j<contrarreloj.length; j++){
+                            
+                        if (contrarreloj[j].dorsal == dorsal){  //si ha participado
+                        aux_con = j;
+                        encontrado = true;
+                        }
+                        
+                    }
+                }
+        
+            }
+        return encontrado;  //devuelve encontrado: true si se encontró con éxito y false si no se encontró
+    }
+    
+    public static boolean buscarEquipo (Corredor acorredores[], Dorti contrarreloj[], String equipo, int dorsal, int tiempo_que_hizo) {
+        boolean encontrado = false;
+        int aux_aco, aux_con;
+        int i, j;
+            
+                for(i=0; (i<acorredores.length) && (encontrado == false); i++){
+                    
+                    if ((acorredores[i].equipo).equals(equipo)) {       //si está registrado
+                        aux_aco = i;
+                        encontrado = true;
+                        dorsal = acorredores[i].dorsal;
+                        
+                        for (j=0; j<contrarreloj.length; j++){
+                        
+                            if (contrarreloj[j].dorsal==dorsal){        //una vez que lo encuentro anoto el tiempo de este dorsal (osea corredor)
+                                aux_con = j;
+                                tiempo_que_hizo = contrarreloj[j].tiempo;
+                            }
+                        
+                        }
+                    }
+                    //una vez que encuentro el equipo anoto el dorsal del corredor asociado
+                    //lo busco en el otro array
+
+                }       /* devuelvo el booleano de encontrado y las variables dorsal y tiempo_que_hizo (tiempo que
+                que hizo el ciclista que corresponde al equipo) ya con los valores que buscó y guardó el método*/
+        return encontrado;
+    }
+    
     public static void ordenarClasificacionTiempo(Dorti aaa[], Dorti aux, int llegados) {
         for (int i = 0; i <=llegados; i++){
             int pos = i;
             aux.tiempo = aaa[i].tiempo;                                     //Creo la variable aux temporal donde se guarda el dato
+            aux.dorsal = aaa[i].dorsal;
             
             while ((pos>0) && (aaa[pos-1].tiempo>aux.tiempo)){              //Ordena el array aaa por tiempo
                 aaa[pos] = aaa[pos-1];
