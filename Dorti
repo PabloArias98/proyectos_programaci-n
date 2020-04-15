@@ -1,12 +1,10 @@
 package contrarreloj;
 
-
 /**
  * declaramos aquí un nuevo objeto dorti  ( dorsal-tiempo)
  * y la tabla de clasificacion que es un array de dortis
  */
 public class Dorti {
-
     // atributos
     int dorsal;
     int tiempo;
@@ -43,10 +41,9 @@ public class Dorti {
 
     }
     
-    public static boolean buscarDorsal(Corredor acorredores[], Dorti contrarreloj[], int dorsal){
+    public static boolean buscarDorsal(Corredor acorredores[], Dorti contrarreloj[], int aux_aco, int aux_con, int dorsal){
         //le paso los dos arrays y el dorsal que he introducido para buscarlo
         boolean encontrado=false;
-        int aux_con, aux_aco;
         int i , j;
     
             for(i=0; (i<acorredores.length) && (encontrado == false); i++){
@@ -69,11 +66,11 @@ public class Dorti {
         return encontrado;  //devuelve encontrado: true si se encontró con éxito y false si no se encontró
     }
     
-    public static boolean buscarEquipo (Corredor acorredores[], Dorti contrarreloj[], String equipo, int tiempo_que_hizo) {
+    public static boolean buscarEquipo (Corredor acorredores[], Dorti contrarreloj[], String equipo, int aux_aco, int aux_con, int tiempo_que_hizo) {
         boolean encontrado = false;
-        int aux_aco, aux_con, dorsal;
+        int dorsal;
         int i, j;
-            
+
                 for(i=0; (i<acorredores.length) && (encontrado == false); i++){
                     
                     if ((acorredores[i].equipo).equals(equipo)) {       //si está registrado
