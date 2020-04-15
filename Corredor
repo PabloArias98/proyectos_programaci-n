@@ -51,12 +51,12 @@ public class Corredor {
         Scanner entradaTeclado = new Scanner(System.in);
 
         System.out.println(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
-        System.out.println("1 : ");
-        System.out.println("3 : ");
-        System.out.println("5 : ");
+        System.out.println("1 : Mostrar la clasificación ");
+        System.out.println("3 : Anotar la llegada de un corredor ");
+        System.out.println("5 : Mostrar los datos de un corredor ");
         System.out.println("7 : Mostrar corredores participantes ");
-        System.out.println("8 : ");
-        System.out.println("9 : ");
+        System.out.println("8 : Mostrar equipos participantes ");
+        System.out.println("9 : Mostrar información de un equipo a desear ");
         System.out.println("99 : Salir");
 
         leido = entradaTeclado.nextInt();
