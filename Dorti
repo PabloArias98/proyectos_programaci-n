@@ -1,12 +1,10 @@
 package contrarreloj;
 
-
 /**
  * declaramos aquí un nuevo objeto dorti  ( dorsal-tiempo)
  * y la tabla de clasificacion que es un array de dortis
  */
 public class Dorti {
-
     // atributos
     int dorsal;
     int tiempo;
@@ -43,10 +41,64 @@ public class Dorti {
 
     }
     
+    public static boolean buscarDorsal(Dorti contrarreloj[], Corredor acorredores[], Dorti ciclista_buscado, Corredor ciclista_datos, int dorsal){
+        //le paso los dos arrays y el dorsal que he introducido para buscarlo
+        boolean encontrado=false;
+        int i, j;
+    
+            for(i=0; (i<contrarreloj.length) && (encontrado == false); i++){
+                    
+                if (contrarreloj[i].dorsal == dorsal) {  //si está registrado
+                    //una vez que encuentra el dorsal registrado comprueba si ha participado
+                    ciclista_buscado.dorsal = dorsal;
+                    ciclista_buscado.tiempo = contrarreloj[i].tiempo;
+                }
+        
+            }
+            encontrado=false;
+            for (j=0; (j<acorredores.length); j++){
+                if (acorredores[j].dorsal == dorsal) {
+                    ciclista_datos.nombre = acorredores[j].nombre;
+                    ciclista_datos.equipo = acorredores[j].equipo;
+                    encontrado=true;
+                }
+            }
+        return encontrado;  //devuelve encontrado: true si se encontró con éxito y false si no se encontró
+    }
+    /* Aquí en BuscarEquipo tengo que poner un bucle dentro de otro ya que a la hora de-
+    encontrar a más de un ciclista del equipo deseado pues me evito complicaciones */
+    public static void buscarEquipo (Dorti contrarreloj[], Corredor acorredores[], Dorti ciclista_buscado, Corredor ciclista_datos, String equipo) {
+        int dorsal;
+        int i, j;
+        //Empiezo recorriendo el array acorredores en busca del equipo deseado
+        for (i = 0; i < acorredores.length; i++) {
+
+            if ((acorredores[i].equipo).equals(equipo)) { 
+                dorsal = acorredores[i].dorsal;
+                ciclista_datos.nombre = acorredores[i].nombre;
+                ciclista_datos.equipo = acorredores[i].equipo;
+                
+                for (j = 0; j < contrarreloj.length; j++) { //Una vez que lo encuentro
+                //apunto datos del ciclista y recorro la otra tabla                   
+                    if (contrarreloj[j].dorsal == dorsal) {                   //una vez que lo encuentro anoto el tiempo de este dorsal (osea corredor)
+                        ciclista_buscado.tiempo = contrarreloj[j].tiempo;   //pongo el tiempo que hizo en la variable
+                        ciclista_buscado.dorsal = dorsal;
+                        //Imprimo datos
+                        System.out.println("Datos del equipo " + ciclista_datos.equipo + "\n"
+                                + "Nombre del corredor: " + ciclista_datos.nombre + " \n"
+                                + "Tiempo que hizo: " + ciclista_buscado.tiempo + " \n"
+                                + "Dorsal: " + ciclista_buscado.dorsal);
+                    }
+                }
+            } //vuelvo a recorrer la tabla de equipos en busca si se repite para imprimirlo también
+        }
+    }
+    
     public static void ordenarClasificacionTiempo(Dorti aaa[], Dorti aux, int llegados) {
         for (int i = 0; i <=llegados; i++){
             int pos = i;
             aux.tiempo = aaa[i].tiempo;                                     //Creo la variable aux temporal donde se guarda el dato
+            aux.dorsal = aaa[i].dorsal;
             
             while ((pos>0) && (aaa[pos-1].tiempo>aux.tiempo)){              //Ordena el array aaa por tiempo
                 aaa[pos] = aaa[pos-1];
@@ -65,6 +117,7 @@ public class Dorti {
             System.out.println(p +" : " + aaa[p].dorsal + " >> " + aaa[p].tiempo);
         }
         System.out.println(" * - * - * - * ");
+        llegados++;
 
     }
 
