@@ -18,26 +18,29 @@ public class Contrarreloj {
         
         
         //variables globales
-        int opcion, dorsal=-1, tiempo=999999, tiempo_que_hizo;   //inicializo tiempo también
+        int opcion, dorsal=-1, tiempo=999999;   //inicializo tiempo también
         String equipo;
-        char resp;
         int llegados = 0;   // corredores llegados
-        int i, j, aux_aco, aux_con;  //inicializo las variables de control de los for i e j y las de guardar posiciones
         boolean encontrado;
+        String nombre = "Fulanito"; equipo = "Huha";
         
         //#####################################################
         
         Corredor acorredores[] = new Corredor[3];   // el array de los corredores inscritos
         
         Dorti contrarreloj[] = new Dorti [3];   // el array secundario, el que se ordena (dorsal y tiempo)
+
+        Dorti ciclista_buscado = new Dorti(dorsal, tiempo);
         
-        Dorti ciclista_meta = new Dorti(dorsal, tiempo);  //este es un objeto auxiliar, que usaré para ordenar
+        Corredor ciclista_datos = new Corredor(dorsal, nombre, equipo);
         
         //#####################################################
         
         // cargar los datos de los corredores
         
         Corredor.cargarDatos(acorredores); // rellena el array  acorredores
+        
+        Dorti.inicializar(contrarreloj); // rellena el array contrarreloj
         
         opcion = Corredor.menu(); // invocar el menú
 
@@ -47,36 +50,30 @@ public class Contrarreloj {
                 case 0:  // meter más datos de corredores, opcion oculta
                     break;
                 case 1:  // mostrar la clasificación
-                    Dorti.ordenarClasificacionTiempo(contrarreloj, ciclista_meta, llegados);
-                    Dorti.mostrarClasificacion(contrarreloj, llegados);
-                    
+                    Dorti.mostrarClasificacion(contrarreloj, llegados);                   
                     break;
                 case 2: // libre
                     break;
                     
                 case 3: // anotar la llegada de un corredor
-                    do {
                     System.out.println("Introduzca la llegada de un corredor");
                     System.out.print("El dorsal: ");
                     dorsal = entrada.nextInt();
-                    System.out.println("El tiempo: ");
+                    System.out.print("El tiempo: ");
                     tiempo = entrada.nextInt();
-                    
+
                     Dorti.clasificar(dorsal, tiempo, contrarreloj, llegados);
-                    
+                    llegados++;
                     //cada vez que metemos un ciclista nuevo ordenamos
-                    Dorti.ordenarClasificacionTiempo(contrarreloj, ciclista_meta, llegados);
-                    
-                    llegados++; //Se actualiza llegados cada vez que hay un corredor nuevo en la meta
-                    
-                    System.out.println("Desea introducir más corredores? (s/n)");
-                    resp=entrada.next().charAt(0);
-                    
-                    }while(resp!='n' || resp!='N');
-                    
-                    // (...)
+                    Dorti.ordenarClasificacionTiempo(contrarreloj, llegados);
+                    /* algo tengo mal en el metodo ordenar que luego cuando le pido al programa que me muestre la tabla 
+                    no me muestra el dorsal del ciclista que metí antes
+                    ahora arreglé algo, parece que va pero meto un ciclista nuevo y me lo sobrescribe
+                    Se actualiza llegados cada vez que hay un corredor nuevo en la meta */
+
                     break;
-                case 4: // libre
+                case 4:
+                    // libre
                     break;
                     
                     
@@ -84,41 +81,30 @@ public class Contrarreloj {
                 System.out.println("Introduzca el dorsal: ");
                 dorsal = entrada.nextInt();             //dorsal = leer dorsal();
                 
-                encontrado = false;
-                aux_aco=0; aux_con=0;
-                for(i=0; (i<acorredores.length) && (encontrado == false); i++){
-                    
-                    if (acorredores[i].dorsal == dorsal) {  //si está registrado
-                        //una vez que encuentra el dorsal registrado comprueba si ha participado
-                        for (j=0; j<contrarreloj.length; j++){
-                            
-                        if (contrarreloj[j].dorsal == dorsal){  //si ha participado
-                        aux_aco = i;
-                        aux_con = j;
-                        encontrado = true;
-                        }
-                        
-                        }
-                    }
-                }
+                //llamo al método buscarDorsal, le paso los dos arrays y el dorsal que introducí
                 
-                if (encontrado!=false){
+                encontrado = Dorti.buscarDorsal(contrarreloj, acorredores, ciclista_buscado, ciclista_datos, dorsal);
+                //aquí si finalmente encuentra o no el dorsal, la variable encontrado recibirá un true o false
                 
-                System.out.println("Datos del corredor de la dorsal "+acorredores[aux_aco].dorsal+"\n"
-                        + "Nombre: "+acorredores[aux_aco].nombre+" \n"
-                        + "Equipo: "+acorredores[aux_aco].equipo+" \n"
-                        + "Tiempo: "+contrarreloj[aux_con].tiempo+" \n"
-                        + "Tiempo que está del primero: "+(contrarreloj[aux_con].tiempo-contrarreloj[0].tiempo)+" segundos");
+                if (encontrado==true){
+                //si lo ha encontrado tendré las posiciones de nombre, equipo, tiempo etc...
+                System.out.println("Datos del corredor de la dorsal "+ciclista_buscado.dorsal+"\n"
+                        + "Nombre: "+ciclista_datos.nombre+" \n"
+                        + "Equipo: "+ciclista_datos.equipo+" \n"
+                        + "Tiempo: "+ciclista_buscado.tiempo+" \n"
+                        + "Tiempo que está del primero: "+(ciclista_buscado.tiempo-contrarreloj[0].tiempo)+" segundos");
                 }
                 
                 else {
                 System.out.println("Error: ha introducido un dorsal inválido");
                 
                 }
-                    
+                
                 break;
+                
                 case 6: // libre
-                    break;
+                
+                break;
                     
                 case 7: // mostrar la lista de corredores de la carrera
                     Corredor.mostrarDatos(acorredores);
@@ -127,55 +113,23 @@ public class Contrarreloj {
                 case 8:// mostrar equipos participantes
                     System.out.println("Lista de equipos participantes:");
                     
-                    for (i=0; i<=acorredores.length; i++){
+                    for (int i=0; i<=acorredores.length; i++){
                         System.out.println("Equipo: "+acorredores[i].equipo);
                     }
                     
                     break;
                 case 9: // mostrar información de un equipo
-                    
-                    System.out.println("Introduzca tu equipo: ");
-                    equipo = entrada.nextLine();
-  
-                encontrado = false;
-                aux_aco=0; aux_con=0;
-                
-                tiempo_que_hizo=9999999;
-                for(i=0; (i<acorredores.length) && (encontrado == false); i++){
-                    
-                    if ((acorredores[i].equipo).equals(equipo)) {       //si está registrado
-                        aux_aco = i;
-                        encontrado = true;
-                        dorsal = acorredores[i].dorsal;
-                        
-                        for (j=0; j<contrarreloj.length; j++){
-                        
-                        if (contrarreloj[j].dorsal==dorsal){        //una vez que lo encuentro anoto el tiempo de este dorsal (osea corredor)
-                            aux_con = j;
-                            tiempo_que_hizo = contrarreloj[j].tiempo;
-                        }
-                        
-                    }
-                    }
-                    //una vez que encuentro el equipo anoto el dorsal del corredor asociado
-                    //lo busco en el otro array
+                    Scanner entradaline = new Scanner(System.in);
+                    System.out.print("Introduzca tu equipo: ");
+                    equipo = entradaline.nextLine();
 
-                    
-                }
-                
-                if(encontrado!=false){
-                
-                System.out.println("Datos del equipo "+acorredores[aux_aco].equipo+"\n"
-                        + "Nombre del corredor: "+acorredores[aux_aco].nombre+" \n"
-                        + "Tiempo que hizo: "+tiempo_que_hizo+" \n"
-                        + "Dorsal: "+acorredores[aux_con].dorsal);
-                }
-                
-                else {
-                    System.out.println("ERROR: Ha introducido un equipo inválido");
-                }
-                
-                
+
+                /*llamo al método buscarEquipo, también le envio los parámetros dorsal y tiempo_que_hizo
+                que los que el método nos dará los valores deseados, correspondientes al ciclista que pertenece
+                al equipo buscado*/
+
+                Dorti.buscarEquipo(contrarreloj, acorredores, ciclista_buscado, ciclista_datos, equipo);
+ 
                 break;
                 default:
                     System.out.println("Ha introducido una opción inválida, enseguida será retornado al menú");
